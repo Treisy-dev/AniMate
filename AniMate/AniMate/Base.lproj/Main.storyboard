@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="v5V-1T-8yr">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Tab Bar Controller-->
+        <scene sceneID="TlA-hq-deD">
+            <objects>
+                <tabBarController id="v5V-1T-8yr" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LbG-lM-Ocm">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="TabBarColor"/>
+                        <color key="barTintColor" systemColor="labelColor"/>
+                        <color key="selectedImageTintColor" name="YellowColor"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="FnH-eW-U4a" kind="relationship" relationship="viewControllers" id="equ-mf-yJ4"/>
+                        <segue destination="wE9-Vy-6W6" kind="relationship" relationship="viewControllers" id="OHT-uF-cOG"/>
+                        <segue destination="KuJ-fg-mjy" kind="relationship" relationship="viewControllers" id="IoV-Za-Q2n"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MSb-pP-GwS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-231" y="-619"/>
+        </scene>
+        <!--SearchPage-->
+        <scene sceneID="Yte-Xi-iLf">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SearchPage" id="FnH-eW-U4a" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="dXp-hC-krh"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b3A-8p-ARx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="474" y="-707"/>
+        </scene>
+        <!--FavoritePage-->
+        <scene sceneID="tEf-eo-thl">
+            <objects>
+                <viewControllerPlaceholder storyboardName="FavoritePage" id="wE9-Vy-6W6" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="cxL-eG-2zL"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bpY-uA-maR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="488" y="-619"/>
+        </scene>
+        <!--UserPage-->
+        <scene sceneID="Vn1-2o-OfO">
+            <objects>
+                <viewControllerPlaceholder storyboardName="UserPage" id="KuJ-fg-mjy" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="5AI-ne-gqv"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Az9-vh-J9f" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="484" y="-511"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="TabBarColor">
+            <color red="0.14117647058823529" green="0.14901960784313725" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YellowColor">
+            <color red="0.9882352941176471" green="0.73333333333333328" blue="0.16862745098039217" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
