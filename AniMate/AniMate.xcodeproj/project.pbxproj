@@ -23,6 +23,8 @@
 		C3DAD6112A562BE700751D74 /* UIFonts+AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD6102A562BE700751D74 /* UIFonts+AppFonts.swift */; };
 		C3DAD6132A562CFB00751D74 /* Lato in Resources */ = {isa = PBXBuildFile; fileRef = C3DAD6122A562CFB00751D74 /* Lato */; };
 		C3DAD6182A563A0E00751D74 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C3DAD6172A563A0E00751D74 /* Alamofire */; };
+		C3DAD61D2A563B4300751D74 /* APIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD61C2A563B4300751D74 /* APIModels.swift */; };
+		C3DAD61F2A563B5300751D74 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD61E2A563B5300751D74 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		C3DAD6102A562BE700751D74 /* UIFonts+AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFonts+AppFonts.swift"; sourceTree = "<group>"; };
 		C3DAD6122A562CFB00751D74 /* Lato */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Lato; path = ../../../../../Downloads/Lato; sourceTree = "<group>"; };
 		C3DAD6152A562CFF00751D74 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
+		C3DAD61C2A563B4300751D74 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
+		C3DAD61E2A563B5300751D74 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,7 @@
 		C3DAD5E72A5625A200751D74 /* AniMate */ = {
 			isa = PBXGroup;
 			children = (
+				C3DAD6192A563B1400751D74 /* Data */,
 				C3DAD60D2A562B4800751D74 /* Extentions */,
 				C3DAD5FD2A56264500751D74 /* Module */,
 				C3DAD5FC2A56260200751D74 /* ApplicationLifececyle */,
@@ -152,6 +157,15 @@
 				C3DAD6152A562CFF00751D74 /* Lato-Regular.ttf */,
 			);
 			path = Lato;
+			sourceTree = "<group>";
+		};
+		C3DAD6192A563B1400751D74 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				C3DAD61C2A563B4300751D74 /* APIModels.swift */,
+				C3DAD61E2A563B5300751D74 /* NetworkService.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,6 +249,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3DAD61F2A563B5300751D74 /* NetworkService.swift in Sources */,
+				C3DAD61D2A563B4300751D74 /* APIModels.swift in Sources */,
 				C3DAD60C2A56271F00751D74 /* SearchViewController.swift in Sources */,
 				C3DAD5ED2A5625A200751D74 /* ViewController.swift in Sources */,
 				C3DAD6082A5626FF00751D74 /* UserViewController.swift in Sources */,
