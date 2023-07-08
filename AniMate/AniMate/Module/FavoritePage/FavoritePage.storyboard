@@ -27,7 +27,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="FavoriteIconGray" width="37" height="32"/>
+        <image name="FavoriteIconGray" width="43" height="44"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

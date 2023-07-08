@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C309CAB82A57C9DF00FE3A2B /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */; };
 		C3DAD5E92A5625A200751D74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD5E82A5625A200751D74 /* AppDelegate.swift */; };
 		C3DAD5EB2A5625A200751D74 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD5EA2A5625A200751D74 /* SceneDelegate.swift */; };
 		C3DAD5ED2A5625A200751D74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD5EC2A5625A200751D74 /* ViewController.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		C3DAD5E52A5625A200751D74 /* AniMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AniMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3DAD5E82A5625A200751D74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C3DAD5EA2A5625A200751D74 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			children = (
 				C3DAD6012A5626A700751D74 /* SearchPage.storyboard */,
 				C3DAD60B2A56271F00751D74 /* SearchViewController.swift */,
+				C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C309CAB82A57C9DF00FE3A2B /* ListTableViewCell.swift in Sources */,
 				C3DAD61F2A563B5300751D74 /* NetworkService.swift in Sources */,
 				C3DAD61D2A563B4300751D74 /* APIModels.swift in Sources */,
 				C3DAD60C2A56271F00751D74 /* SearchViewController.swift in Sources */,
