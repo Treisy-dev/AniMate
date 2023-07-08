@@ -14,7 +14,7 @@ final class NetworkService{
         
     private init() {}
     
-    public func getWordInfo(for word: String, completion: @escaping (Result<[Anime], Error>) -> Void)  {
+    public func getAnimeInfo(for word: String, completion: @escaping (Result<AnimeData, Error>) -> Void)  {
         makeRequest(with: word) { result in
             switch result {
             case .success(let words):
@@ -26,23 +26,26 @@ final class NetworkService{
     }
     
     
-    private func makeRequest(with word: String,  completion: @escaping (Result<[Anime], Error>) -> Void) {
-        AF.request(makeUrl(word: word), method: .get).responseData { response in
+    private func makeRequest(with word: String,  completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        AF.request(makeUrl(name: word), method: .get).responseData { response in
             switch response.result {
             case .success(let word):
                 do{
-                    let result = try JSONDecoder().decode([Anime].self, from: word)
+                    let result = try JSONDecoder().decode(AnimeData.self, from: word)
                     completion(.success(result))
-                } catch let error{
+                }catch {
+                    print("Ошибка парсинга данных: \(error)")
+                } /*catch let error{
                     completion(.failure(error))
-                }
+                }*/
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
     
-    public func makeUrl(word: String) -> String{
-        return "https://kitsu.io/api/edge/anime?filter[text]=\(word)&page[limit]=5"
+    public func makeUrl(name: String) -> String{
+        print("https://kitsu.io/api/edge/anime?filter[text]=\(name)&page[limit]=5")
+        return "https://kitsu.io/api/edge/anime?filter[text]=\(name)&page[limit]=5"
     }
 }
