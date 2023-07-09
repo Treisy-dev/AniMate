@@ -14,38 +14,99 @@ final class NetworkService{
         
     private init() {}
     
-    public func getAnimeInfo(for word: String, completion: @escaping (Result<AnimeData, Error>) -> Void)  {
-        makeRequest(with: word) { result in
+    // MARK: - Get Information
+    
+    public func getAnimeInfo(for word: String, completion: @escaping (Result<AnimeData, Error>) -> Void) {
+            search(for: word, using: makeAnimeRequest, completion: completion)
+    }
+    
+    public func getTopAnimeInfo(completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        searchTop(using: makeTopAnimeRequest, completion: completion)
+    }
+    
+    public func getTopMangaInfo(completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        searchTop(using: makeTopMangaRequest, completion: completion)
+    }
+    
+    public func getMangaInfo(for word: String, completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        search(for: word, using: makeMangaRequest, completion: completion)
+    }
+    
+    private func search(for word: String,
+                        using apiMethod: @escaping (String, @escaping (Result<AnimeData, Error>) -> Void) -> Void,
+                        completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        apiMethod(word) { result in
             switch result {
-            case .success(let words):
-                completion(.success(words))
+            case .success(let data):
+                completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
     
+    private func searchTop(using apiMethod: @escaping (@escaping (Result<AnimeData, Error>) -> Void) -> Void,
+                           completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        apiMethod() { result in
+            switch result {
+            case .success(let data):
+                completion(.success(data))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
     
-    private func makeRequest(with word: String,  completion: @escaping (Result<AnimeData, Error>) -> Void) {
-        AF.request(makeUrl(name: word), method: .get).responseData { response in
+    //MARK: - Requests
+    
+    private func makeAnimeRequest(with word: String, completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        makeRequest(url: getAnimeUrl(name: word), completion: completion)
+    }
+    
+    private func makeTopAnimeRequest(completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        makeRequest(url: getTopAnimeUrl(), completion: completion)
+    }
+    
+    private func makeTopMangaRequest(completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        makeRequest(url: getTopMangaUrl(), completion: completion)
+    }
+    
+    private func makeMangaRequest(with word: String, completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        makeRequest(url: getMangaUrl(name: word), completion: completion)
+    }
+    
+    private func makeRequest(url: String, completion: @escaping (Result<AnimeData, Error>) -> Void) {
+        AF.request(url, method: .get).responseData { response in
             switch response.result {
-            case .success(let word):
-                do{
-                    let result = try JSONDecoder().decode(AnimeData.self, from: word)
+            case .success(let data):
+                do {
+                    let result = try JSONDecoder().decode(AnimeData.self, from: data)
                     completion(.success(result))
-                }catch {
-                    print("Ошибка парсинга данных: \(error)")
-                } /*catch let error{
+                } catch {
                     completion(.failure(error))
-                }*/
+                }
             case .failure(let error):
                 completion(.failure(error))
             }
         }
     }
     
-    public func makeUrl(name: String) -> String{
-        print("https://kitsu.io/api/edge/anime?filter[text]=\(name)&page[limit]=5")
-        return "https://kitsu.io/api/edge/anime?filter[text]=\(name)&page[limit]=5"
+    //MARK: - URLs
+    
+    private func getAnimeUrl(name: String) -> String{
+        return "https://kitsu.io/api/edge/anime?filter[text]=\(name)&page[limit]=10"
     }
+    
+    private func getTopAnimeUrl() -> String{
+        return "https://kitsu.io/api/edge/anime?page[limit]=10&sort=-userCount"
+    }
+    
+    private func getMangaUrl(name: String) -> String{
+        return "https://kitsu.io/api/edge/manga?filter[text]=\(name)&page[limit]=10"
+    }
+    
+    private func getTopMangaUrl() -> String{
+        return "https://kitsu.io/api/edge/manga?page[limit]=10&sort=-userCount"
+    }
+
 }

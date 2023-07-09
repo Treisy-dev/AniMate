@@ -11,17 +11,21 @@ final class ListTableViewCell : UITableViewCell {
     
     @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var nameLable: UILabel!
-    @IBOutlet weak var readButton: UIButton!
+    @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     
     let unLikedImage = UIImage(named: "UnLikedIcon")
     let likedImage = UIImage(named: "LikedIcon")
+        
+    let userDefaults = UserDefaults.standard
+    let favoriteArrayKey = "favoriteArrayKey"
+
     
-    
+    var animeList: AnimeData = AnimeData(data: [])
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        readButton.layer.cornerRadius = 18
+        moreButton.layer.cornerRadius = 18
     }
     
     required init?(coder: NSCoder) {
@@ -36,13 +40,16 @@ final class ListTableViewCell : UITableViewCell {
         
     }
     
-    func setUp(_ data: Anime){
-        let name: String = data.attributes.titles.en ?? data.attributes.titles.en_jp ?? data.attributes.slug
+    func setUp(_ data: Anime, _ animeData: AnimeData){
+        animeList = animeData
+        let name: String = data.attributes.titles.en ?? data.attributes.titles.en_jp ?? data.attributes.canonicalTitle
         nameLable.text = name
-        readButton.layer.cornerRadius = 9
-        readButton.layer.borderWidth = 1
-        readButton.layer.borderColor = UIColor.appYellowColor?.cgColor
-        guard let url = URL(string: data.attributes.posterImage.tiny) else { return }
+        moreButton.layer.cornerRadius = 9
+        moreButton.layer.borderWidth = 1
+        moreButton.layer.borderColor = UIColor.appYellowColor?.cgColor
+        likeButton.setImage(unLikedImage, for: .normal)
+    
+        guard let url = URL(string: (data.attributes.posterImage.tiny ?? data.attributes.posterImage.small) ?? data.attributes.posterImage.original) else { return }
         let session = URLSession.shared
         let task = session.dataTask(with: url) { data, response, error in
             if let error = error {
@@ -64,10 +71,57 @@ final class ListTableViewCell : UITableViewCell {
     
     
     @IBAction func likeButtonAction(_ sender: Any) {
-        if likeButton.image(for: .normal) == unLikedImage{
+        let indexPath = getIndexPath()
+
+        if likeButton.image(for: .normal) == unLikedImage {
+            addToUserDefaults(indexPath: indexPath!)
             likeButton.setImage(likedImage, for: .normal)
         } else {
+            deleteFromUserDefaults(indexPath: indexPath!)
             likeButton.setImage(unLikedImage, for: .normal)
+        }
+
+        /*if let savedData = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
+            let savedAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: savedData) {
+            
+            guard let domainName = Bundle.main.bundleIdentifier else {
+                return
+            }
+            UserDefaults.standard.removePersistentDomain(forName: domainName)  // очищает userDefaults
+            print(savedAnimeArray)
+        }*/
+    }
+    
+    private func getIndexPath() -> IndexPath? {
+            guard let tableView = superview as? UITableView else {
+                return nil
+            }
+            return tableView.indexPath(for: self)
+        }
+    
+    private func deleteFromUserDefaults(indexPath : IndexPath){
+        if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
+            var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+            for (index, anime) in favoriteAnimeArray.enumerated(){
+                if animeList.data[indexPath.row].id == anime.id{
+                    let index = index
+                    favoriteAnimeArray.remove(at: index) // Удалить элемент из массива
+                    UserDefaults.standard.set(favoriteAnimeArray, forKey: "favoriteArrayKey")
+                    break
+                }
+            }
+        }
+    }
+    
+    private func addToUserDefaults(indexPath : IndexPath){
+        if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
+            var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+            favoriteAnimeArray.append(animeList.data[indexPath.row])
+            userDefaults.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
+        } else {
+            var favoriteAnimeArray = [Anime]()
+            favoriteAnimeArray.append(animeList.data[indexPath.row])
+            userDefaults.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
         }
     }
 }

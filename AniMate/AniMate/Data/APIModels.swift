@@ -24,22 +24,25 @@ struct Anime: Codable{
 struct Attributes: Codable {
     let createdAt: String
     let slug: String
-    let description: String
+    let description: String?
     let titles: Titles
-    let startDate: String
+    let canonicalTitle : String
+    let userCount: Int
+    let startDate: String?
     let endDate: String?
     let nextRelease: String?
     let posterImage: PosterImage
     let episodeCount: Int?
     let episodeLength: Int?
     let totalLength: Int?
-    let showType: String
-    let nsfw: Bool
+    let showType: String?
+    let nsfw: Bool?
 }
 
 struct PosterImage: Codable {
-            let tiny: String
-            let small: String
+    let tiny: String?
+    let small: String?
+    let original : String
 }
 
 struct Titles: Codable {
