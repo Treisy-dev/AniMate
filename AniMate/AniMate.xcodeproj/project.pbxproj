@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		114F4D732A5C0606001D3BE4 /* FavoriteListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114F4D722A5C0606001D3BE4 /* FavoriteListTableViewCell.swift */; };
 		C309CAB82A57C9DF00FE3A2B /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */; };
 		C3DAD5E92A5625A200751D74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD5E82A5625A200751D74 /* AppDelegate.swift */; };
 		C3DAD5EB2A5625A200751D74 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD5EA2A5625A200751D74 /* SceneDelegate.swift */; };
@@ -22,13 +23,13 @@
 		C3DAD60C2A56271F00751D74 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD60B2A56271F00751D74 /* SearchViewController.swift */; };
 		C3DAD60F2A562B7800751D74 /* UIColors+AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD60E2A562B7800751D74 /* UIColors+AppColors.swift */; };
 		C3DAD6112A562BE700751D74 /* UIFonts+AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD6102A562BE700751D74 /* UIFonts+AppFonts.swift */; };
-		C3DAD6132A562CFB00751D74 /* Lato in Resources */ = {isa = PBXBuildFile; fileRef = C3DAD6122A562CFB00751D74 /* Lato */; };
 		C3DAD6182A563A0E00751D74 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C3DAD6172A563A0E00751D74 /* Alamofire */; };
 		C3DAD61D2A563B4300751D74 /* APIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD61C2A563B4300751D74 /* APIModels.swift */; };
 		C3DAD61F2A563B5300751D74 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DAD61E2A563B5300751D74 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		114F4D722A5C0606001D3BE4 /* FavoriteListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListTableViewCell.swift; sourceTree = "<group>"; };
 		C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		C3DAD5E52A5625A200751D74 /* AniMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AniMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3DAD5E82A5625A200751D74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -46,7 +47,6 @@
 		C3DAD60B2A56271F00751D74 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		C3DAD60E2A562B7800751D74 /* UIColors+AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColors+AppColors.swift"; sourceTree = "<group>"; };
 		C3DAD6102A562BE700751D74 /* UIFonts+AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFonts+AppFonts.swift"; sourceTree = "<group>"; };
-		C3DAD6122A562CFB00751D74 /* Lato */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Lato; path = ../../../../../Downloads/Lato; sourceTree = "<group>"; };
 		C3DAD6152A562CFF00751D74 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		C3DAD61C2A563B4300751D74 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
 		C3DAD61E2A563B5300751D74 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -91,7 +91,6 @@
 				C3DAD5EE2A5625A200751D74 /* Main.storyboard */,
 				C3DAD5F12A5625A300751D74 /* Assets.xcassets */,
 				C3DAD5F62A5625A300751D74 /* Info.plist */,
-				C3DAD6122A562CFB00751D74 /* Lato */,
 			);
 			path = AniMate;
 			sourceTree = "<group>";
@@ -120,8 +119,8 @@
 			isa = PBXGroup;
 			children = (
 				C3DAD6012A5626A700751D74 /* SearchPage.storyboard */,
-				C3DAD60B2A56271F00751D74 /* SearchViewController.swift */,
 				C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */,
+				C3DAD60B2A56271F00751D74 /* SearchViewController.swift */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";
@@ -131,6 +130,7 @@
 			children = (
 				C3DAD6032A5626BC00751D74 /* FavoritePage.storyboard */,
 				C3DAD6092A56271400751D74 /* FavoriteViewController.swift */,
+				114F4D722A5C0606001D3BE4 /* FavoriteListTableViewCell.swift */,
 			);
 			path = FavoritePage;
 			sourceTree = "<group>";
@@ -238,7 +238,6 @@
 				C3DAD6042A5626BC00751D74 /* FavoritePage.storyboard in Resources */,
 				C3DAD5F52A5625A300751D74 /* LaunchScreen.storyboard in Resources */,
 				C3DAD6062A5626C700751D74 /* UserPage.storyboard in Resources */,
-				C3DAD6132A562CFB00751D74 /* Lato in Resources */,
 				C3DAD5F22A5625A300751D74 /* Assets.xcassets in Resources */,
 				C3DAD5F02A5625A200751D74 /* Main.storyboard in Resources */,
 				C3DAD6022A5626A700751D74 /* SearchPage.storyboard in Resources */,
@@ -257,6 +256,7 @@
 				C3DAD61D2A563B4300751D74 /* APIModels.swift in Sources */,
 				C3DAD60C2A56271F00751D74 /* SearchViewController.swift in Sources */,
 				C3DAD5ED2A5625A200751D74 /* ViewController.swift in Sources */,
+				114F4D732A5C0606001D3BE4 /* FavoriteListTableViewCell.swift in Sources */,
 				C3DAD6082A5626FF00751D74 /* UserViewController.swift in Sources */,
 				C3DAD5E92A5625A200751D74 /* AppDelegate.swift in Sources */,
 				C3DAD5EB2A5625A200751D74 /* SceneDelegate.swift in Sources */,
