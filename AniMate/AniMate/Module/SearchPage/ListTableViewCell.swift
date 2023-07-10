@@ -105,7 +105,7 @@ final class ListTableViewCell : UITableViewCell {
             for (index, anime) in favoriteAnimeArray.enumerated(){
                 if animeList.data[indexPath.row].id == anime.id{
                     let index = index
-                    favoriteAnimeArray.remove(at: index) // Удалить элемент из массива
+                    favoriteAnimeArray.remove(at: index)
                     UserDefaults.standard.set(favoriteAnimeArray, forKey: "favoriteArrayKey")
                     break
                 }

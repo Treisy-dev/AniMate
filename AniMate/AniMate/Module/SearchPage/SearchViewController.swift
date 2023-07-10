@@ -112,6 +112,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     
+    private func updateTavleView(){
+        DispatchQueue.main.async {
+            self.listTableView.reloadData()
+            self.checkFavorite()
+        }
+    }
+    
     private func checkFavorite(){
         if let data = UserDefaults.standard.data(forKey: "favoriteArrayKey"),
               let favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
@@ -182,13 +189,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         } else {
             searchTop(using: getTopManga)
             headerLabel.text = "Top-10 Манги:"
-        }
-    }
-    
-    private func updateTavleView(){
-        DispatchQueue.main.async {
-            self.listTableView.reloadData()
-            self.checkFavorite()
         }
     }
     
