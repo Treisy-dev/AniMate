@@ -11,9 +11,7 @@ class FavoriteViewController: UIViewController, UITableViewDataSource, UITableVi
     
     @IBOutlet weak var tableView: UITableView!
     
-    //var anime: AnimeData = AnimeData(data: [])
     var favoriteAnimeArray: [Anime] = []
-    //let likedImage = UIImage(named: "LikedIcon")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +23,14 @@ class FavoriteViewController: UIViewController, UITableViewDataSource, UITableVi
             favoriteAnimeArray = decodedArray
         }
         
-        //tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let data = UserDefaults.standard.data(forKey: "favoriteArrayKey"),
+           let decodedArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+            favoriteAnimeArray = decodedArray
+        }
+        updateTavleView()
     }
     
     @objc func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -43,14 +48,9 @@ class FavoriteViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }
     
-    /*private func checkFavorite() {
-        for (index, anime) in anime.data.enumerated() {
-            if favoriteAnimeArray.contains(where: { $0.id == anime.id }) {
-                let indexPath = IndexPath(row: index, section: 0)
-                if let cell = tableView.cellForRow(at: indexPath) as? ListTableViewCell {
-                    cell.likeButton.setImage(likedImage, for: .normal)
-                }
-            }
+    private func updateTavleView(){
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
-    }*/
+    }
 }

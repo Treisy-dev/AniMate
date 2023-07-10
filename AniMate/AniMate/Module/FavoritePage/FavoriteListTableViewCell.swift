@@ -18,9 +18,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
     let likedImage = UIImage(named: "LikedIcon")
     var tableView : UITableView = UITableView()
     let userDefaults = UserDefaults.standard
-    
-    //var animeList: AnimeData = AnimeData(data: [])
-    
+        
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         moreButton.layer.cornerRadius = 18
@@ -33,7 +31,6 @@ final class FavoriteListTableViewCell: UITableViewCell{
     
     func setUp(_ data: Anime, _ tableView : UITableView){
         self.tableView = tableView
-        //animeList = animeData
         let name: String = data.attributes.titles.en ?? data.attributes.titles.en_jp ?? data.attributes.canonicalTitle
         nameLable.text = name
         moreButton.layer.cornerRadius = 9
@@ -84,7 +81,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
         if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
             var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             favoriteAnimeArray.remove(at: indexPath.row)
-            UserDefaults.standard.set(favoriteAnimeArray, forKey: "favoriteArrayKey")
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
         }
     }
     
@@ -92,7 +89,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
         if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
             var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             favoriteAnimeArray.append(favoriteAnimeArray[indexPath.row])
-            userDefaults.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
         }
     }
 }

@@ -106,7 +106,7 @@ final class ListTableViewCell : UITableViewCell {
                 if animeList.data[indexPath.row].id == anime.id{
                     let index = index
                     favoriteAnimeArray.remove(at: index)
-                    UserDefaults.standard.set(favoriteAnimeArray, forKey: "favoriteArrayKey")
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
                     break
                 }
             }
@@ -117,11 +117,9 @@ final class ListTableViewCell : UITableViewCell {
         if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
             var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             favoriteAnimeArray.append(animeList.data[indexPath.row])
-            userDefaults.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
-        } else {
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")        } else {
             var favoriteAnimeArray = [Anime]()
             favoriteAnimeArray.append(animeList.data[indexPath.row])
-            userDefaults.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
-        }
+                UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")        }
     }
 }

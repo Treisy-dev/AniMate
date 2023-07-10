@@ -38,6 +38,10 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         listTableView.dataSource = self
         listTableView.delegate = self
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        updateTavleView()
+    }
 
     // MARK: - Anime
     

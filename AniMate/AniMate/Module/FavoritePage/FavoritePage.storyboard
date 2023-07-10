@@ -88,7 +88,7 @@
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" selectedImage="FavoriteIconGray" id="SbJ-tZ-jsi"/>
+                    <tabBarItem key="tabBarItem" title="" image="FavoriteIconGray" selectedImage="FavoriteIconGray" id="SbJ-tZ-jsi"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="bsL-xm-sYY" id="NKl-IC-5y7"/>
