@@ -14,7 +14,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     
-    var favoriteVC: UIViewController = FavoriteViewController()
+    weak var favoriteVC: FavoriteViewController?
 
     
     let unLikedImage = UIImage(named: "UnLikedIcon")
@@ -34,7 +34,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
         
     }
     
-    func setUp(_ data: Anime, _ tableView : UITableView, _ VC: UIViewController){
+    func setUp(_ data: Anime, _ tableView : UITableView, _ VC: FavoriteViewController){
         favoriteVC = VC
         self.anime = data
         self.tableView = tableView
@@ -43,7 +43,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
         moreButton.layer.cornerRadius = 9
         moreButton.layer.borderWidth = 1
         moreButton.layer.borderColor = UIColor.appYellowColor?.cgColor
-        likeButton.setImage(likedImage, for: .normal) //
+        likeButton.setImage(likedImage, for: .normal)
         
         guard let url = URL(string: (data.attributes.posterImage.tiny ?? data.attributes.posterImage.small) ?? data.attributes.posterImage.original) else { return }
         let session = URLSession.shared
@@ -83,7 +83,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
         let storyboard = UIStoryboard(name: "MoreInfoPage", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "MoreInfoViewController") as! MoreInfoViewController
         viewController.anime = anime
-        favoriteVC.present(viewController, animated: true)
+        favoriteVC?.present(viewController, animated: true)
         
         addToUserDefaults(indexPath: indexPath!, key: "showedRecentlyKey")
         clearExtraElementsInUD(key: "showedRecentlyKey", id: anime!.id)
@@ -102,6 +102,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
             favoriteAnimeArray.remove(at: indexPath.row)
             UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)
         }
+        favoriteVC?.updateLabelVisibility()
     }
     
     private func addToUserDefaults(indexPath : IndexPath, key: String){
@@ -110,6 +111,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
             favoriteAnimeArray.append(favoriteAnimeArray[indexPath.row])
             UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)
         }
+        favoriteVC?.updateLabelVisibility()
     }
     
     private func clearExtraElementsInUD(key:String, id: String){
