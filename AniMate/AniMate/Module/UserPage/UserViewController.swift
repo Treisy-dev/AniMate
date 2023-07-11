@@ -14,18 +14,22 @@ class UserViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var favoritesLabel: UILabel!
     @IBOutlet weak var countFavoritesLabel: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
     
+    var favoriteAnimeArray: [Anime] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        favoritesLabel.layer.cornerRadius = 15
+        
+        favoritesLabel.layer.cornerRadius = 10
+        favoritesLabel.layer.masksToBounds = true
+        
         userImageView.layer.cornerRadius = userImageView.frame.size.width / 2
         userImageView.clipsToBounds = true
-
         userImageView.backgroundColor = UIColor.gray
         userImageView.layer.borderWidth = 1.0
         userImageView.layer.borderColor = UIColor.lightGray.cgColor
-
+        
         if let imageData = UserDefaults.standard.data(forKey: "userImage"),
            let image = UIImage(data: imageData) {
             userImageView.image = image
@@ -44,11 +48,32 @@ class UserViewController: UIViewController {
         editButton.clipsToBounds = true
         
         usernameTextField.isEnabled = false
-        
         usernameTextField.text = UserDefaults.standard.string(forKey: "username")
-        
         usernameTextField.delegate = self
         
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 110, height: 180)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        collectionView.collectionViewLayout = layout
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.register(FavoriteAnimeCell.self, forCellWithReuseIdentifier: "FavoriteAnimeCell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let data = UserDefaults.standard.data(forKey: "favoriteArrayKey"),
+           let decodedArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+            favoriteAnimeArray = decodedArray
+        }
+        
+        countFavoritesLabel.text = "\(favoriteAnimeArray.count)"
+        collectionView.reloadData()
     }
     
     @objc func imageViewTapped(_ sender: UITapGestureRecognizer) {
@@ -112,8 +137,7 @@ class UserViewController: UIViewController {
 }
 
 extension UserViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
             userImageView.image = pickedImage
             userImageView.contentMode = .scaleAspectFill
@@ -123,7 +147,7 @@ extension UserViewController: UIImagePickerControllerDelegate, UINavigationContr
         picker.dismiss(animated: true, completion: nil)
     }
 
-    internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
 }
@@ -154,5 +178,73 @@ extension UserViewController: UITextFieldDelegate {
             usernameTextField.isEnabled = false
             saveUsernameToUserDefaults(username: textField.text)
         }
+    }
+}
+
+extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return favoriteAnimeArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteAnimeCell", for: indexPath) as! FavoriteAnimeCell
+        
+        let anime = favoriteAnimeArray[indexPath.item]
+        cell.setUp(anime)
+        
+        return cell
+    }
+}
+
+class FavoriteAnimeCell: UICollectionViewCell {
+    let animeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupImageView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setupImageView()
+    }
+    
+    private func setupImageView() {
+        contentView.addSubview(animeImageView)
+        animeImageView.layer.cornerRadius = 10
+        animeImageView.layer.masksToBounds = true
+        NSLayoutConstraint.activate([
+            animeImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            animeImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            animeImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            animeImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+    }
+    
+    func setUp(_ data: Anime) {
+        guard let url = URL(string: (data.attributes.posterImage.tiny ?? data.attributes.posterImage.small) ?? data.attributes.posterImage.original) else { return }
+        let session = URLSession.shared
+        let task = session.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error downloading image: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let data = data, let image = UIImage(data: data) else {
+                print("Invalid image data")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.animeImageView.image = image
+            }
+        }
+        task.resume()
     }
 }
