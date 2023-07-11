@@ -12,11 +12,13 @@ class UserViewController: UIViewController {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var favoritesLabel: UILabel!
+    @IBOutlet weak var countFavoritesLabel: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .appBackgroundColor
-        
+        favoritesLabel.layer.cornerRadius = 15
         userImageView.layer.cornerRadius = userImageView.frame.size.width / 2
         userImageView.clipsToBounds = true
 
@@ -24,7 +26,11 @@ class UserViewController: UIViewController {
         userImageView.layer.borderWidth = 1.0
         userImageView.layer.borderColor = UIColor.lightGray.cgColor
 
-        if userImageView.image == nil {
+        if let imageData = UserDefaults.standard.data(forKey: "userImage"),
+           let image = UIImage(data: imageData) {
+            userImageView.image = image
+            userImageView.contentMode = .scaleAspectFill
+        } else {
             userImageView.contentMode = .center
             userImageView.image = UIImage(systemName: "person")
             userImageView.tintColor = .systemGray4
@@ -38,14 +44,24 @@ class UserViewController: UIViewController {
         editButton.clipsToBounds = true
         
         usernameTextField.isEnabled = false
+        
+        usernameTextField.text = UserDefaults.standard.string(forKey: "username")
+        
+        usernameTextField.delegate = self
+        
     }
     
     @objc func imageViewTapped(_ sender: UITapGestureRecognizer) {
+        textFieldDidEndEditing(usernameTextField)
+        
         if userImageView.image != nil {
             let alertController = UIAlertController(title: nil, message: "Выберите действие", preferredStyle: .actionSheet)
             
-            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (_) in
-                self?.removeImage()
+            if userImageView.image != UIImage(systemName: "person") {
+                let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { [weak self] (_) in
+                    self?.removeImage()
+                }
+                alertController.addAction(deleteAction)
             }
             
             let changeAction = UIAlertAction(title: "Изменить", style: .default) { [weak self] (_) in
@@ -54,7 +70,6 @@ class UserViewController: UIViewController {
             
             let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
             
-            alertController.addAction(deleteAction)
             alertController.addAction(changeAction)
             alertController.addAction(cancelAction)
             
@@ -69,33 +84,75 @@ class UserViewController: UIViewController {
         usernameTextField.becomeFirstResponder()
     }
     
-    func pickImageFromGallery() {
+    private func pickImageFromGallery() {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: nil)
     }
     
-    func removeImage() {
+    private func removeImage() {
         userImageView.image = nil
         userImageView.contentMode = .center
         userImageView.image = UIImage(systemName: "person")
         userImageView.tintColor = .systemGray4
+        
+        UserDefaults.standard.removeObject(forKey: "userImage")
+    }
+    
+    private func saveImageToUserDefaults(image: UIImage) {
+        if let imageData = image.jpegData(compressionQuality: 1.0) {
+            UserDefaults.standard.set(imageData, forKey: "userImage")
+        }
+    }
+    
+    private func saveUsernameToUserDefaults(username: String?) {
+        UserDefaults.standard.set(username, forKey: "username")
     }
 }
 
 extension UserViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage {
             userImageView.image = pickedImage
             userImageView.contentMode = .scaleAspectFill
+            saveImageToUserDefaults(image: pickedImage)
         }
         
         picker.dismiss(animated: true, completion: nil)
     }
 
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    internal func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension UserViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        usernameTextField.isEnabled = false
+        saveUsernameToUserDefaults(username: textField.text)
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if let text = textField.text, text.hasPrefix("@") {
+            let formattedText = String(text.dropFirst())
+            textField.text = formattedText
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.resignFirstResponder()
+
+        if let username = textField.text {
+            if !username.hasPrefix("@") && !username.isEmpty {
+                let formattedUsername = "@\(username)"
+                textField.text = formattedUsername
+            }
+            usernameTextField.isEnabled = false
+            saveUsernameToUserDefaults(username: textField.text)
+        }
     }
 }
