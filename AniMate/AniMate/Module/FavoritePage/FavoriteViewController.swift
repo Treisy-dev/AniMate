@@ -23,6 +23,19 @@ class FavoriteViewController: UIViewController, UITableViewDataSource, UITableVi
             favoriteAnimeArray = decodedArray
         }
         
+        addLabelIfNeeded()
+    }
+    
+    private func addLabelIfNeeded() {
+        if favoriteAnimeArray.isEmpty {
+            let label = UILabel(frame: CGRect(x: 0, y: 150, width: view.bounds.width, height: 30))
+            label.textAlignment = .center
+            label.text = "No favorite anime found"
+            label.textColor = UIColor.white
+            label.font = label.font.withSize(30)
+            label.tag = 123
+            view.addSubview(label)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,9 +61,37 @@ class FavoriteViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }
     
-    private func updateTavleView(){
+    func updateTavleView(){
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.updateLabelVisibility()
         }
     }
+    
+    func updateLabelVisibility() {
+        if favoriteAnimeArray.isEmpty {
+            showNoFavoriteAnimeLabel()
+        } else {
+            hideNoFavoriteAnimeLabel()
+        }
+    }
+
+    func showNoFavoriteAnimeLabel() {
+        if let label = view.viewWithTag(123) as? UILabel {
+            label.isHidden = false
+        } else {
+            let label = UILabel(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 30))
+            label.textAlignment = .center
+            label.text = "No favorite anime found."
+            label.tag = 123 // Assign a tag to the label
+            view.addSubview(label)
+        }
+    }
+
+    func hideNoFavoriteAnimeLabel() {
+        if let label = view.viewWithTag(123) as? UILabel {
+            label.isHidden = true
+        }
+    }
+
 }
