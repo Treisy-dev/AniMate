@@ -102,7 +102,6 @@ final class FavoriteListTableViewCell: UITableViewCell{
             favoriteAnimeArray.remove(at: indexPath.row)
             UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)
         }
-        favoriteVC?.updateLabelVisibility()
     }
     
     private func addToUserDefaults(indexPath : IndexPath, key: String){
@@ -111,7 +110,6 @@ final class FavoriteListTableViewCell: UITableViewCell{
             favoriteAnimeArray.append(favoriteAnimeArray[indexPath.row])
             UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)
         }
-        favoriteVC?.updateLabelVisibility()
     }
     
     private func clearExtraElementsInUD(key:String, id: String){

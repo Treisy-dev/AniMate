@@ -15,13 +15,55 @@ class UserViewController: UIViewController {
     @IBOutlet weak var favoritesLabel: UILabel!
     @IBOutlet weak var countFavoritesLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    
+        
     var favoriteAnimeArray: [Anime] = []
     var recentlyAnimeArray: [Anime] = []
     
+    @IBAction func logOutAction(_ sender: Any) {
+        var myBool = UserDefaults.standard.bool(forKey: "isAutorize")
+        myBool = false
+        UserDefaults.standard.set(myBool, forKey: "isAutorize")
+        let storyboard = UIStoryboard(name: "LoginPage", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+        viewController.VC = self
+        viewController.onDismiss = { isAutorize in
+            self.setAndUpdate()
+        }
+        self.present(viewController, animated: true)
+    }
     override func viewDidLoad() {
-        super.viewDidLoad()
+        let myBool = UserDefaults.standard.bool(forKey: "isAutorize")
+        if  myBool == false{
+            super.viewDidLoad()
+            let storyboard = UIStoryboard(name: "LoginPage", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+            viewController.onDismiss = { isAutorize in
+                self.setAndUpdate()
+            }
+            self.present(viewController, animated: true)
+        } else {
+            super.viewDidLoad()
+            setAndUpdate()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let data = UserDefaults.standard.data(forKey: "favoriteArrayKey"),
+           let decodedArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+            favoriteAnimeArray = decodedArray
+        }
         
+        if let data2 = UserDefaults.standard.data(forKey: "showedRecentlyKey"),
+           let decodedArray2 = try? PropertyListDecoder().decode([Anime].self, from: data2) {
+            recentlyAnimeArray = decodedArray2
+        }
+        
+        countFavoritesLabel.text = "\(favoriteAnimeArray.count)"
+        collectionView.reloadData()
+    }
+    
+    private func setAndUpdate(){
         favoritesLabel.layer.cornerRadius = 10
         favoritesLabel.layer.masksToBounds = true
         
@@ -63,23 +105,6 @@ class UserViewController: UIViewController {
         collectionView.collectionViewLayout = layout
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(RecentlyAnimeCell.self, forCellWithReuseIdentifier: "RecentlyAnimeCell")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if let data = UserDefaults.standard.data(forKey: "favoriteArrayKey"),
-           let decodedArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
-            favoriteAnimeArray = decodedArray
-        }
-        
-        if let data2 = UserDefaults.standard.data(forKey: "showedRecentlyKey"),
-           let decodedArray2 = try? PropertyListDecoder().decode([Anime].self, from: data2) {
-            recentlyAnimeArray = decodedArray2
-        }
-        
-        countFavoritesLabel.text = "\(favoriteAnimeArray.count)"
-        collectionView.reloadData()
     }
     
     @objc func imageViewTapped(_ sender: UITapGestureRecognizer) {
