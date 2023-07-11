@@ -137,7 +137,7 @@ final class ListTableViewCell : UITableViewCell {
             }
     }
     
-    private func clearExtraElementsInUD(key:String, id: String){ // сделать проверку на присутствие такого-же элемента
+    private func clearExtraElementsInUD(key:String, id: String){
         if let data = userDefaults.value(forKey: key) as? Data,
            var showedRecentlyArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             if showedRecentlyArray.count > 15 {

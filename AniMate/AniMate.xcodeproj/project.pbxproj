@@ -69,6 +69,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C35F95402A5D4F4B002B677E /* MoreInfoPage */ = {
+			isa = PBXGroup;
+			children = (
+				C35F953B2A5D210C002B677E /* MoreInfoPage.storyboard */,
+				C35F953D2A5D212C002B677E /* MoreInfoViewController.swift */,
+			);
+			path = MoreInfoPage;
+			sourceTree = "<group>";
+		};
 		C3DAD5DC2A5625A200751D74 = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +122,7 @@
 		C3DAD5FD2A56264500751D74 /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				C35F95402A5D4F4B002B677E /* MoreInfoPage */,
 				C3DAD6002A56268C00751D74 /* UserPage */,
 				C3DAD5FF2A56268200751D74 /* FavoritePage */,
 				C3DAD5FE2A56267700751D74 /* SearchPage */,
@@ -126,8 +136,6 @@
 				C3DAD6012A5626A700751D74 /* SearchPage.storyboard */,
 				C309CAB72A57C9DF00FE3A2B /* ListTableViewCell.swift */,
 				C3DAD60B2A56271F00751D74 /* SearchViewController.swift */,
-				C35F953B2A5D210C002B677E /* MoreInfoPage.storyboard */,
-				C35F953D2A5D212C002B677E /* MoreInfoViewController.swift */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";

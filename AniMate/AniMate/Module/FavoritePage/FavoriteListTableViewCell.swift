@@ -86,7 +86,7 @@ final class FavoriteListTableViewCell: UITableViewCell{
         favoriteVC.present(viewController, animated: true)
         
         addToUserDefaults(indexPath: indexPath!, key: "showedRecentlyKey")
-        clearExtraElementsInUD(key: "showedRecentlyKey")
+        clearExtraElementsInUD(key: "showedRecentlyKey", id: anime!.id)
     }
     
     private func getIndexPath() -> IndexPath? {
@@ -112,11 +112,17 @@ final class FavoriteListTableViewCell: UITableViewCell{
         }
     }
     
-    private func clearExtraElementsInUD(key:String){    // сделать проверку на присутствие такого-же элемента
+    private func clearExtraElementsInUD(key:String, id: String){
         if let data = userDefaults.value(forKey: key) as? Data,
            var showedRecentlyArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             if showedRecentlyArray.count > 15 {
                 showedRecentlyArray.remove(at: 0)
+            }
+            for i in 0..<showedRecentlyArray.count-1{
+                if showedRecentlyArray[i].id == id {
+                    showedRecentlyArray.remove(at: i)
+                    break
+                }
             }
             UserDefaults.standard.set(try? PropertyListEncoder().encode(showedRecentlyArray), forKey: key)
         }
