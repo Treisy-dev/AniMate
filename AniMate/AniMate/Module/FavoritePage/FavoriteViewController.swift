@@ -44,7 +44,7 @@ class FavoriteViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteListTableViewCell", for: indexPath) as? FavoriteListTableViewCell else { return UITableViewCell() }
         
-        cell.setUp(favoriteAnimeArray[indexPath.row], tableView) 
+        cell.setUp(favoriteAnimeArray[indexPath.row], tableView, self) 
         return cell
     }
     

@@ -50,10 +50,13 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" name="BackgroundColor"/>
                                                     <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" title="Read">
+                                                    <buttonConfiguration key="configuration" style="plain" title="More">
                                                         <fontDescription key="titleFontDescription" name="Lato-Regular" family="Lato" pointSize="10"/>
                                                         <color key="baseForegroundColor" name="YellowColor"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="moreButtonAction:" destination="BlE-9H-bSW" eventType="touchUpInside" id="mnM-ZP-YWB"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ILu-qC-fwU">
                                                     <rect key="frame" x="342" y="11" width="40" height="31"/>

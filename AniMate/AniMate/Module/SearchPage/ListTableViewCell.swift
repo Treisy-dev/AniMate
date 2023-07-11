@@ -16,10 +16,10 @@ final class ListTableViewCell : UITableViewCell {
     
     let unLikedImage = UIImage(named: "UnLikedIcon")
     let likedImage = UIImage(named: "LikedIcon")
-        
+    
+    var searchVC: UIViewController = SearchViewController()
+    
     let userDefaults = UserDefaults.standard
-    let favoriteArrayKey = "favoriteArrayKey"
-
     
     var animeList: AnimeData = AnimeData(data: [])
     
@@ -40,7 +40,8 @@ final class ListTableViewCell : UITableViewCell {
         
     }
     
-    func setUp(_ data: Anime, _ animeData: AnimeData){
+    public func setUp(_ data: Anime, _ animeData: AnimeData, _ VC: UIViewController){
+        searchVC = VC
         animeList = animeData
         let name: String = data.attributes.titles.en ?? data.attributes.titles.en_jp ?? data.attributes.canonicalTitle
         nameLable.text = name
@@ -48,7 +49,7 @@ final class ListTableViewCell : UITableViewCell {
         moreButton.layer.borderWidth = 1
         moreButton.layer.borderColor = UIColor.appYellowColor?.cgColor
         likeButton.setImage(unLikedImage, for: .normal)
-    
+        
         guard let url = URL(string: (data.attributes.posterImage.tiny ?? data.attributes.posterImage.small) ?? data.attributes.posterImage.original) else { return }
         let session = URLSession.shared
         let task = session.dataTask(with: url) { data, response, error in
@@ -72,54 +73,83 @@ final class ListTableViewCell : UITableViewCell {
     
     @IBAction func likeButtonAction(_ sender: Any) {
         let indexPath = getIndexPath()
-
+        
         if likeButton.image(for: .normal) == unLikedImage {
-            addToUserDefaults(indexPath: indexPath!)
+            addToUserDefaults(indexPath: indexPath!, key: "favoriteArrayKey")
             likeButton.setImage(likedImage, for: .normal)
         } else {
-            deleteFromUserDefaults(indexPath: indexPath!)
+            deleteFromUserDefaults(indexPath: indexPath!, key: "favoriteArrayKey")
             likeButton.setImage(unLikedImage, for: .normal)
         }
-
+        
         /*if let savedData = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
-            let savedAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: savedData) {
-            
-            guard let domainName = Bundle.main.bundleIdentifier else {
-                return
-            }
-            UserDefaults.standard.removePersistentDomain(forName: domainName)  // очищает userDefaults
-            print(savedAnimeArray)
-        }*/
+         let savedAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: savedData) {
+         
+         guard let domainName = Bundle.main.bundleIdentifier else {
+         return
+         }
+         UserDefaults.standard.removePersistentDomain(forName: domainName)  // очищает userDefaults
+         print(savedAnimeArray)
+         }*/
+    }
+    
+    @IBAction func moreButtonAction(_ sender: Any) {
+        let indexPath = getIndexPath()
+        
+        let storyboard = UIStoryboard(name: "MoreInfoPage", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "MoreInfoViewController") as! MoreInfoViewController
+        viewController.anime = animeList.data[indexPath!.row]
+        searchVC.present(viewController, animated: true)
+        
+        addToUserDefaults(indexPath: indexPath!, key: "showedRecentlyKey")
+        clearExtraElementsInUD(key: "showedRecentlyKey", id: animeList.data[indexPath!.row].id)
     }
     
     private func getIndexPath() -> IndexPath? {
-            guard let tableView = superview as? UITableView else {
-                return nil
-            }
-            return tableView.indexPath(for: self)
+        guard let tableView = superview as? UITableView else {
+            return nil
         }
+        return tableView.indexPath(for: self)
+    }
     
-    private func deleteFromUserDefaults(indexPath : IndexPath){
-        if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
-            var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+    private func deleteFromUserDefaults(indexPath : IndexPath, key: String){
+        if let data = userDefaults.value(forKey: key) as? Data,
+           var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             for (index, anime) in favoriteAnimeArray.enumerated(){
                 if animeList.data[indexPath.row].id == anime.id{
                     let index = index
                     favoriteAnimeArray.remove(at: index)
-                    UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)
                     break
                 }
             }
         }
     }
     
-    private func addToUserDefaults(indexPath : IndexPath){
-        if let data = userDefaults.value(forKey: "favoriteArrayKey") as? Data,
-            var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+    private func addToUserDefaults(indexPath : IndexPath, key: String){
+        if let data = userDefaults.value(forKey: key) as? Data,
+           var favoriteAnimeArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             favoriteAnimeArray.append(animeList.data[indexPath.row])
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")        } else {
-            var favoriteAnimeArray = [Anime]()
-            favoriteAnimeArray.append(animeList.data[indexPath.row])
-                UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: "favoriteArrayKey")        }
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)        } else {
+                var favoriteAnimeArray = [Anime]()
+                favoriteAnimeArray.append(animeList.data[indexPath.row])
+                UserDefaults.standard.set(try? PropertyListEncoder().encode(favoriteAnimeArray), forKey: key)
+            }
+    }
+    
+    private func clearExtraElementsInUD(key:String, id: String){ // сделать проверку на присутствие такого-же элемента
+        if let data = userDefaults.value(forKey: key) as? Data,
+           var showedRecentlyArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
+            if showedRecentlyArray.count > 15 {
+                showedRecentlyArray.remove(at: 0)
+            }
+            for i in 0..<showedRecentlyArray.count-1{
+                if showedRecentlyArray[i].id == id {
+                    showedRecentlyArray.remove(at: i)
+                    break
+                }
+            }
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(showedRecentlyArray), forKey: key)
+        }
     }
 }

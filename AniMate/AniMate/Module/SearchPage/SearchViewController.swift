@@ -111,7 +111,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListTableViewCell") as? ListTableViewCell else {return UITableViewCell()}
         
-        cell.setUp(anime.data[indexPath.row], anime)
+        cell.setUp(anime.data[indexPath.row], anime, self)
         
         return cell
     }

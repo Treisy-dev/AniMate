@@ -32,14 +32,23 @@ struct Attributes: Codable {
     let endDate: String?
     let nextRelease: String?
     let posterImage: PosterImage
+    let coverImage: CoverImage?
     let episodeCount: Int?
+    let chapterCount: Int?
     let episodeLength: Int?
+    let volumeCount: Int?
     let totalLength: Int?
     let showType: String?
     let nsfw: Bool?
 }
 
 struct PosterImage: Codable {
+    let tiny: String?
+    let small: String?
+    let original : String
+}
+
+struct CoverImage: Codable {
     let tiny: String?
     let small: String?
     let original : String
