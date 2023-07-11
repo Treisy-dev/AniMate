@@ -17,6 +17,7 @@ class UserViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     var favoriteAnimeArray: [Anime] = []
+    var recentlyAnimeArray: [Anime] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +62,7 @@ class UserViewController: UIViewController {
         layout.minimumLineSpacing = 10
         collectionView.collectionViewLayout = layout
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(FavoriteAnimeCell.self, forCellWithReuseIdentifier: "FavoriteAnimeCell")
+        collectionView.register(RecentlyAnimeCell.self, forCellWithReuseIdentifier: "RecentlyAnimeCell")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +71,11 @@ class UserViewController: UIViewController {
         if let data = UserDefaults.standard.data(forKey: "favoriteArrayKey"),
            let decodedArray = try? PropertyListDecoder().decode([Anime].self, from: data) {
             favoriteAnimeArray = decodedArray
+        }
+        
+        if let data2 = UserDefaults.standard.data(forKey: "showedRecentlyKey"),
+           let decodedArray2 = try? PropertyListDecoder().decode([Anime].self, from: data2) {
+            recentlyAnimeArray = decodedArray2
         }
         
         countFavoritesLabel.text = "\(favoriteAnimeArray.count)"
@@ -183,20 +189,21 @@ extension UserViewController: UITextFieldDelegate {
 
 extension UserViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return favoriteAnimeArray.count
+        return recentlyAnimeArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FavoriteAnimeCell", for: indexPath) as! FavoriteAnimeCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentlyAnimeCell", for: indexPath) as! RecentlyAnimeCell
         
-        let anime = favoriteAnimeArray[indexPath.item]
+        let reversedIndex = recentlyAnimeArray.count - 1 - indexPath.item
+        let anime = recentlyAnimeArray[reversedIndex]
         cell.setUp(anime)
         
         return cell
     }
 }
 
-class FavoriteAnimeCell: UICollectionViewCell {
+class RecentlyAnimeCell: UICollectionViewCell {
     let animeImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
