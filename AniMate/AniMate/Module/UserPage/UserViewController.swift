@@ -155,5 +155,4 @@ extension UserViewController: UITextFieldDelegate {
             saveUsernameToUserDefaults(username: textField.text)
         }
     }
-
 }
